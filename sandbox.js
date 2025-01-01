@@ -1,34 +1,69 @@
-function convertToRomanNumerals(num) {
-  const romans = {
-		0: '',
-    1: 'I',
-    2: 'II',
-    3: 'III',
-    4: 'IV',
-    5: 'V',
-    6: 'VI',
-    7: 'VII',
-    8: 'VIII',
-    9: 'IX',
-    10: 'X',
+function sortByAsc(unsortedArr) {
+  const merge = (arr, start, mid, end) => {
+    let leftIndex = start;
+    let rightIndex = mid;
+    let sortedIndex = 0;
+    const sorted = new Array(end - start);  // Create an array to hold sorted elements
+
+    while (leftIndex < mid && rightIndex < end) {
+      if (arr[leftIndex] <= arr[rightIndex]) {
+        sorted[sortedIndex] = arr[leftIndex];
+        leftIndex += 1;
+      } else {
+        sorted[sortedIndex] = arr[rightIndex];
+        rightIndex += 1;
+      }
+      sortedIndex += 1;
+    }
+
+    while (leftIndex < mid) {
+      sorted[sortedIndex] = arr[leftIndex];
+      leftIndex += 1;
+      sortedIndex += 1;
+    }
+
+    while (rightIndex < end) {
+      sorted[sortedIndex] = arr[rightIndex];
+      rightIndex += 1;
+      sortedIndex += 1;
+    }
+
+    // Copy the sorted elements back into the original array
+    const newArr = arr
+    for (let i = start; i < end; i += 1) {
+      newArr[i] = sorted[i - start];
+    }
   };
 
-  let number = '';
-  if (num >= 10) {
-    let tenth = '';
-    const dec = Math.floor(num / 10);
-    for (let i = 0; i < dec; i += 1) tenth += romans['10'];
-    const rem = num % 10;
-    console.log(rem)
-    return tenth + romans[rem] || '';
-  }
-  number += romans[num];
+  const mergeSort = (arr, start, end) => {
+    if (end - start <= 1) {
+      return;
+    }
 
-  return number;
+    const mid = Math.floor((start + end) / 2);
+    mergeSort(arr, start, mid);
+    mergeSort(arr, mid, end);
+    merge(arr, start, mid, end);
+  };
+
+  mergeSort(unsortedArr, 0, unsortedArr.length);
+  return unsortedArr;
 }
 
-const num = 10
 
-const res = convertToRomanNumerals(num)
+const arr = [
+  30,
+  -24,
+  66,
+  -39,
+  30,
+  70,
+  76,
+  96,
+  -48,
+  69
+]
 
-console.log(res)
+sortByAsc(arr)
+
+console.log(arr)
